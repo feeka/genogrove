@@ -11,9 +11,9 @@
 #ifndef GENOGROVE_ANYTYPE_HPP
 #define GENOGROVE_ANYTYPE_HPP
 
-// Standard
 #include <memory>
 #include <ostream>
+#include <istream>
 #include <string>
 #include <typeindex>
 
