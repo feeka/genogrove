@@ -9,6 +9,7 @@
 #ifndef GENOGROVE_STRUCTURE_NODE_HPP
 #define GENOGROVE_STRUCTURE_NODE_HPP
 
+#include <utility>
 // standard
 #include <string_view>
 #include <vector>
@@ -92,6 +93,17 @@ class node {
         }
         // Allocate key on heap
         auto* key_ptr = new gdt::key<key_type, data_type>(key1);
+        this->keys.insert(this->keys.begin() + i, key_ptr);
+        return key_ptr;
+    }
+    // rvalue overload - move into the newly allocated key to avoid extra copies
+    gdt::key<key_type, data_type>* insert_key(gdt::key<key_type, data_type>&& key1) {
+        int i = 0;
+        while(i < this->keys.size() && key1.get_value() > this->keys[i]->get_value()) {
+            i++;
+        }
+        // Allocate key on heap using move-construction to avoid copying
+        auto* key_ptr = new gdt::key<key_type, data_type>(std::move(key1));
         this->keys.insert(this->keys.begin() + i, key_ptr);
         return key_ptr;
     }
