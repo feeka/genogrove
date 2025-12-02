@@ -234,7 +234,7 @@ class grove {
         // update the parent (aka new child node)
         parent->get_children().insert(parent->get_children().begin() + index + 1, new_child);
         gdt::key<key_type, data_type> parent_key{child->calc_parent_key()};
-        auto* parent_key_ptr = new gdt::key<key_type, data_type>(parent_key);
+        auto* parent_key_ptr = new gdt::key<key_type, data_type>(std::move(parent_key));
         parent->get_keys().insert(parent->get_keys().begin() + index, parent_key_ptr);
 
         if(child->get_is_leaf()) {
@@ -273,11 +273,11 @@ class grove {
         node<key_type, data_type>* root = this->get_root(index);
         if(root == nullptr) {
             root = this->insert_root(index);
-            return root->insert_key(key);
+            return root->insert_key(std::move(key));
         } else {
             // get rightmost node and insert
             node<key_type, data_type>* rightmost_node = this->get_rightmost_node(index);
-            auto* key_ptr = rightmost_node->insert_key(key);
+            auto* key_ptr = rightmost_node->insert_key(std::move(key));
 
             // handle key overflow in node
             if(rightmost_node->get_keys().size() == this->order) {
